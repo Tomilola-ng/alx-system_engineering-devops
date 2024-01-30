@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 # print "Best School" 10 times using until loop
 
-i=0
+idx=0
 
 until false; do
   echo "Best School"
-  ((i++))
-  if [[ $i -lt 10 ]]; then
+  ((idx++))
+  if [[ $idx -lt 10 ]]; then
     continue
   else
     break
