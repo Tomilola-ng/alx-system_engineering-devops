@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+# Popular Fizzbuzz algo
+
+idx=1
+
+while [ "$idx" -le 100 ]; do
+
+  if ! (( idx % 3 )) && ! (( idx % 5 )); then
+    echo "FizzBuzz"
+  elif ! (( idx % 3 )); then
+    echo "Fizz"
+  elif ! (( idx % 5 )); then
+    echo "Buzz"
+  else
+    echo "$idx"
+  fi
+  
+  ((idx++))
+done

@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# clock displayer
+
+idx=0
+
+while [ "$idx" -le 12 ]; do
+  echo "Hour: $idx"
+  
+  col=1
+  
+  while [ "$col" -lt 60 ]; do
+    echo "$col"
+    col=$((col + 1))
+  done
+
+  idx=$((idx + 1))
+done

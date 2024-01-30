@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+# Superstitious numbers
+
+idx=1
+
+while [ "$idx" -lt 21 ]; do
+  
+  case "$idx" in
+    4)
+      echo "$idx"
+      echo "bad luck from China"
+      ;;
+    9)
+      echo "$idx"
+      echo "bad luck from Japan"
+      ;;
+    17)
+      echo "$idx"
+      echo "bad luck from Italy"
+      ;;
+    *)
+      echo "$idx"
+      ;;
+  esac
+
+  ((idx++))
+done

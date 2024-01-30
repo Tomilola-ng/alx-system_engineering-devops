@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+# Checker Algorithm to mark
+
+file="school"
+
+# Bunch of Checkers
+if [ -e "$file" ]; then
+
+  echo "school file exists"
+
+  # empty file checker
+  if [ ! -s "$file" ]; then
+    echo "school file is empty"
+
+    # regular file checker
+    if [ -f "$file" ]; then
+      echo "school is a regular file"
+    fi  
+
+  else
+
+    echo "school file is not empty"
+
+    # regular file checker
+    if [ -f "$file" ]; then
+      echo "school is a regular file"
+    fi  
+  
+  fi
+
+else
+  
+  echo "school file does not exist"
+
+fi

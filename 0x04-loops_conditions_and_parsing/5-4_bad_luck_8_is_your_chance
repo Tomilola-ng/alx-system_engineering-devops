@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+# print strings based on checker
+
+idx=1
+
+while [ "$idx" -lt 11 ]; do
+
+  # A CHECKER HERE
+  if [ "$idx" -eq 4 ]; then
+    echo "bad luck"
+  elif [ "$idx" -eq 8 ]; then
+    echo "good luck"
+  else
+    echo "Best School"
+  fi
+
+  ((idx++))
+done
