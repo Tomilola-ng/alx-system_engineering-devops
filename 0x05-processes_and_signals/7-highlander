@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# DOESN'T KILL, it mocks
+
+# USING TRAPT TO MOCK SIGTERM SIGNALS
+trap "echo I am invincible!!!" SIGTERM
+
+while true; do
+  echo "To infinity and beyond"
+  sleep 2
+done;
