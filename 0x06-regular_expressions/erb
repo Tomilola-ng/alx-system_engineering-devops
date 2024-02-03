@@ -1,5 +1,0 @@
-#!/usr/bin/bash
-
-exe $1
-
-gacp EXE
