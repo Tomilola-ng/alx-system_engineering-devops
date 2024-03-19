@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+# Backup original hosts file
+cp /etc/hosts /etc/hosts.bak
+
+# Change localhost IP
+sed -i 's/127.0.0.1/127.0.0.2/g' /etc/hosts
+
+# Change facebook.com IP
+sed -i 's/157.240.11.35/8.8.8.8/g' /etc/hosts
+
+# Output success message
+echo "Configuration complete!"
+
+# Display modified hosts file
+echo "Updated hosts file:"
+cat /etc/hosts
+
+# Clean up backup file after script execution
+rm /etc/hosts.bak
+
