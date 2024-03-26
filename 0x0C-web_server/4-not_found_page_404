@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+# SERVE PAGE AFTER INSTALLING NGINX
+
+sudo apt-get update -y -qq && \
+	 sudo apt-get install nginx -y
+
+sudo service nginx start
+
+sudo chown -R "$USER":"$USER" /var/www/html
+sudo chmod -R 755 /var/www
+
+sudo bash -c 'cat <<EOF > /var/www/html/404.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 Not Found</title>
+</head>
+<body>
+    <h1>404 Not Found</h1>
+    <p>Ceci n&#39;est pas une page</p>
+</body>
+</html>
+EOF'
+
+sudo sed -i '/server_name _;/a \ \ \ \ error_page 404 /404.html;' /etc/nginx/sites-available/default
+
+sudo service nginx restart
