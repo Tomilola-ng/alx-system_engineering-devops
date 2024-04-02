@@ -1,0 +1,59 @@
+#!/usr/bin/env bash
+# Install and configure HAProxy as a load balancer
+
+echo -e "Updating and doing some minor checks...\n"
+
+# Function to install packages if not already installed
+install() {
+    command -v "$1" &> /dev/null
+
+    if [ $? -ne 0 ]; then
+        echo -e "Installing: $1\n"
+        sudo apt-get update -y -qq && \
+        sudo apt-get install -y "$1" -qq || { echo "Error: Failed to install $1"; exit 1; }
+        echo -e "\n"
+    else
+        echo -e "${1} is already installed.\n"
+    fi
+}
+
+# Using func Install HAProxy
+install haproxy
+
+echo -e "\nSetting up HAProxy configuration.\n"
+
+# Backup default configuration file
+sudo cp /etc/haproxy/haproxy.cfg "/etc/haproxy/haproxy.cfg.$(date +"%Y%m%d_%H%M%S").bak"
+
+# Configure HAProxy
+sudo tee /etc/haproxy/haproxy.cfg >/dev/null <<EOF
+defaults
+    mode http
+    timeout client 15s
+    timeout connect 10s
+    timeout server 15s
+    timeout http-request 10s
+
+frontend tomilola-tech-frontend
+    bind *:80
+    default_backend tomilola-tech-backend
+
+backend tomilola-tech-backend
+    balance roundrobin
+    server 520542-web-01 54.237.92.153:80 check
+    server 520542-web-02 54.237.74.165:80 check
+EOF
+
+# Enable HAProxy to be started by init script
+sudo sed -i 's/ENABLED=0/ENABLED=1/' /etc/default/haproxy
+
+echo "HAProxy configuration completed - Roundrobin On web-01 & web-02"
+
+# Restart HAProxy service if not running, otherwise, reload configuration
+if ! pgrep -x "haproxy" >/dev/null; then
+    sudo service haproxy start
+else
+    sudo service haproxy reload
+fi
+
+echo "HAProxy service restarted/reloaded."
