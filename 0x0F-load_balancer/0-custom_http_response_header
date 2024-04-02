@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+# Configure Nginx to include a custom HTTP response header
+
+# Function to install packages if not already installed
+install() {
+    command -v "$1" &>/dev/null
+    if [ $? -ne 0 ]; then
+        echo "Installing $1..."
+        sudo apt-get update -y -qq && \
+        sudo apt-get install -y "$1" -qq
+        echo "Installed $1."
+    else
+        echo "$1 is already installed."
+    fi
+}
+
+# Install Nginx if not installed
+install nginx
+
+# Allow Nginx through the firewall
+sudo ufw allow 'Nginx HTTP'
+
+# Get the hostname of the server
+HOSTNAME=$(hostname)
+
+# Define custom Nginx configuration
+NGINX_CONFIG=$(cat <<EOF
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+    root /var/www/html;
+    index index.html index.htm index.nginx-debian.html;
+    server_name _;
+    add_header X-Served-By $HOSTNAME;
+
+    location / {
+        try_files \$uri \$uri/ =404;
+    }
+
+    error_page 404 /404.html;
+    location = /404.html {
+        root /var/www/html;
+        internal;
+    }
+}
+EOF
+)
+
+# Write custom Nginx configuration to file
+echo "$NGINX_CONFIG" | sudo tee /etc/nginx/sites-available/default >/dev/null
+
+# Restart Nginx to apply changes
+sudo systemctl restart nginx
+
+echo "Nginx configured with custom HTTP response header."
