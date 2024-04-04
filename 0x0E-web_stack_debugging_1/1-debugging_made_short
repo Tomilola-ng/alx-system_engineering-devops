@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# PITTER POTTER PECKLE PEPPER
+
+apt-get update && apt-get install -y nginx > /dev/null
+sed -i 's/listen\s*[0-9]*\s*default_server/listen 80 default_server/' /etc/nginx/nginx.conf; pkill nginx; lsof -t -i:80 -sTCP:LISTEN | xargs kill; nginx
+printf '\n'
