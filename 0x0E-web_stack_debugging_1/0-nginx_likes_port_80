@@ -1,12 +1,25 @@
 #!/usr/bin/env bash
 # PITTER POTTTER PECKLE POTTER
 
-# Install Nginx if not already installed
+# Install Nginx if not installed
 apt-get update
 apt-get install -y nginx
 
-# Actual Code
-sudo ln -sf /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
+# Check if Nginx is running, start it if not
+if ! systemctl status nginx | grep -q "Active: active (running)"; then
+    systemctl start nginx
+fi
 
-# Restart
-sudo service nginx restart
+# Check the Nginx configuration file for the listen directive
+if ! grep -q "listen 80 default_server;" /etc/nginx/nginx.conf; then
+    sed -i 's/listen\s*[0-9]*\s*default_server/listen 80 default_server/' /etc/nginx/nginx.conf
+fi
+
+# Check for processes listening on port 80
+if lsof -i :80 | grep -qv "nginx"; then
+    # Stop or kill the process using port 80
+    lsof -i :80 | grep -v "nginx" | awk '{print $2}' | xargs kill
+fi
+
+# Restart Nginx
+systemctl restart nginx
