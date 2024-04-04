@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# PITTER POTTTER PECKLE POTTER
+
+# Install Nginx if not already installed
+apt-get update
+apt-get install -y nginx
+
+# Actual Code
+sudo ln -sf /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
+
+# Restart
+sudo service nginx restart
