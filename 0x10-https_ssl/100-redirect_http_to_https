@@ -1,0 +1,54 @@
+global
+        log /dev/log    local0
+        log /dev/log    local1 notice
+        chroot /var/lib/haproxy
+        stats socket /run/haproxy/admin.sock mode 660 level admin expose-fd listeners
+        stats timeout 30s
+        user haproxy
+        group haproxy
+        daemon
+
+        ca-base /etc/ssl/certs
+        crt-base /etc/ssl/private
+
+        # SSL/TLS configuration for HTTPS termination
+        ssl-default-bind-ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-S>
+        ssl-default-bind-ciphersuites TLS_AES_128_GCM_SHA256:TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256
+        ssl-default-bind-options ssl-min-ver TLSv1.2 no-tls-tickets
+
+defaults
+        log     global
+        mode    http
+        option  httplog
+        option  dontlognull
+        timeout connect 5000
+        timeout client  50000
+        timeout server  50000
+        # Error handling configurations
+        errorfile 400 /etc/haproxy/errors/400.http
+        errorfile 403 /etc/haproxy/errors/403.http
+        errorfile 408 /etc/haproxy/errors/408.http
+        errorfile 500 /etc/haproxy/errors/500.http
+        errorfile 502 /etc/haproxy/errors/502.http
+        errorfile 503 /etc/haproxy/errors/503.http
+        errorfile 504 /etc/haproxy/errors/504.http
+
+# HTTP frontend for redirecting HTTP to HTTPS
+frontend tomilola-frontend-http
+        bind *:80
+        mode http
+        # Redirect HTTP traffic to HTTPS
+        http-request redirect scheme https code 301 if !{ ssl_fc }
+
+# HTTPS frontend for terminating SSL
+frontend tomilola-frontend-https
+        bind *:443 ssl crt /etc/haproxy/certs/tomilola.tech.pem
+        # Set X-Forwarded-Proto header for HTTPS requests
+        http-request set-header X-Forwarded-Proto https
+        default_backend tomilola-backend
+
+# Backend server configuration
+backend tomilola-backend
+        balance roundrobin
+        server 520542-web-01 54.237.92.153 check
+        server 520542-web-02 54.237.74.165 check
