@@ -1,0 +1,24 @@
+echo -e "UPDATE AND INSTALL \n"
+sudo apt-get update
+sudo apt-get install -y ufw
+
+echo -e "DENY INCOMING"
+sudo ufw default deny incoming
+
+
+echo -e "ALLOW THIS INCOMING PORTS \n"
+sudo ufw allow 22/tcp
+sudo ufw allow 80/tcp
+sudo ufw allow 443/tcp
+
+echo -e "ENABLE FIREWALL \n"
+sudo ufw enable
+
+echo -e "PROGRAM DONE \n"
+
+*nat
+:PREROUTING ACCEPT [0:0]
+-A PREROUTING -p tcp --dport 8080 -j REDIRECT --to-port 80
+COMMIT
+
+sudo ufw reload
