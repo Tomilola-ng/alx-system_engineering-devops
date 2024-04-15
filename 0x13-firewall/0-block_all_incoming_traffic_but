@@ -1,0 +1,17 @@
+echo -e "UPDATE AND INSTALL \n"
+sudo apt-get update
+sudo apt-get install -y ufw
+
+echo -e "DENY INCOMING"
+sudo ufw default deny incoming
+
+
+echo -e "ALLOW THIS INCOMING PORTS \n"
+sudo ufw allow 22/tcp
+sudo ufw allow 80/tcp
+sudo ufw allow 443/tcp
+
+echo -e "ENABLE FIREWALL \n"
+sudo ufw enable
+
+echo -e "PROGRAM DONE \n"
