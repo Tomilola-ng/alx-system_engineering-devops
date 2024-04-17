@@ -1,0 +1,17 @@
+#!/bin/bash
+# Fix Server Configuration
+
+# Ensure proper permissions for nginx.conf
+chmod 644 /etc/nginx/nginx.conf
+
+# Set user to nginx in nginx.conf
+sed -Ei 's/\s*#?\s*user .*/user nginx;/' /etc/nginx/nginx.conf
+
+# Ensure nginx listens on port 80
+sed -Ei 's/(listen (\[::\]:)?80) /\180 /' /etc/nginx/sites-enabled/default
+
+# Stop Apache2 service
+pkill apache2
+
+# Restart Nginx service as the nginx user
+su nginx -s /bin/bash -c 'service nginx restart'
