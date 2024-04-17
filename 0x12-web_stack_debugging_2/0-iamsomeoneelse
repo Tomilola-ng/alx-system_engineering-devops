@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+# BASICALLY WHOAMI
+sudo -u "$1" whoami
