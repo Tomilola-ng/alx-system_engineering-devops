@@ -1,7 +1,5 @@
 #!/usr/bin/python3
-'''
-    EMPLOYEE DATA GATHER
-'''
+""" EMPLOYEE DATA GATHER """
 
 import re
 import requests
@@ -19,7 +17,7 @@ if __name__ == '__main__':
             all_tasks = list(filter(lambda x: x.get('userId') == idx, results))
             done_tasks = list(filter(lambda x: x.get('completed'), all_tasks))
             print(
-                f'Employee {employee} is done with tasks({len(done_tasks)}/{len(tasks)}):'
+                f'Employee {employee} is done with tasks({len(done_tasks)}/{len(all_tasks)}):'
             )
             if len(done_tasks) > 0:
                 for task in done_tasks:
