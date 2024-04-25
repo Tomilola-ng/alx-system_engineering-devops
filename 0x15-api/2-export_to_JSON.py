@@ -24,7 +24,7 @@ if __name__ == '__main__':
 
     for task in all_tasks:
         completed = task.get('completed')
-        title_task = task.get('title')            
+        title_task = task.get('title')
         datationary[user_id].append({
                                   "task": title_task,
                                   "completed": completed,
