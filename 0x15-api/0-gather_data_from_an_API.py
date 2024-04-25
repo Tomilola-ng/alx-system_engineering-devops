@@ -4,8 +4,8 @@
 '''
 
 import re
-import sys
 import requests
+import sys
 
 ENDPOINT = "https://jsonplaceholder.typicode.com"
 
